@@ -71,24 +71,177 @@ One note before you delve into your tasks: for each endpoint, you are expected t
 
 You will need to provide detailed documentation of your API endpoints including the URL, request parameters, and the response body. Use the example below as a reference.
 
-### Documentation Example
+ENDPOINTS
 
-`GET '/api/v1.0/categories'`
-
-- Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
-- Request Arguments: None
-- Returns: An object with a single key, `categories`, that contains an object of `id: category_string` key: value pairs.
-
-```json
+GET /categories
+•	Fetches a dictionary of all categories
+•	Request parameters: None.
 {
-  "1": "Science",
-  "2": "Art",
-  "3": "Geography",
-  "4": "History",
-  "5": "Entertainment",
-  "6": "Sports"
+  "categories": {
+    "1": "Science",       
+    "2": "Art",
+    "3": "Geography",     
+    "4": "History",       
+    "5": "Entertainment", 
+    "6": "Sports"
+  },
+  "success": true
 }
-```
+GET /questions?page=<page_number>
+•	Fetches: a dictionary of paginated questions across all categories
+•	Request arguments: page integer
+
+example
+{
+  "all_questions": 19,
+  "categories": {
+    "1": "Science",
+    "2": "Art",
+    "3": "Geography",
+    "4": "History",
+    "5": "Entertainment",
+    "6": "Sports"
+  },
+  "current_category": null,
+  "questions": [
+    {
+      "answer": "Apollo 13",
+      "category": 5,
+      "difficulty": 4,
+      "id": 2,
+      "question": "What movie earned Tom Hanks his third straight Oscar nomination, in 1996?"
+    },
+  ],
+  "success": true
+}
+DELETE /questions/:question_id/
+•	Delete question using a question_id
+•	Request arguments:int: question_id
+ {
+ "deleted": 2,
+  "success": true,
+  "total_books": 18
+}
+POST /questions
+•	Creates a new question.
+•	Request arguments: question (string, answer(string), difficulty(int), category(string).
+{
+  "success": true,
+  "created": 1,
+  "question": 1,
+  "total_questions": 21,
+}
+POST /search/questions - 
+•	Looks through all question and matches it to search term.
+•	Request arguments: SearchTerm(string)
+{
+  "current_category": null,
+  "questions": [
+    {
+      "answer": "George Washington Carver",
+      "category": 4,
+      "difficulty": 2,
+      "id": 12,
+      "question": "Who invented Peanut Butter?"
+    },
+    {
+      "answer": "Alexander Fleming",
+      "category": 1,
+      "difficulty": 3,
+      "id": 21,
+      "question": "Who discovered penicillin?"
+    }
+  ],
+  "success": true,
+  "total_questions": 2
+}
+GET /categories/<int:category_id>/questions
+•	Gets questions from a specific category
+•	Request arguments: category_id(int)
+{
+  "current_category": 3,
+  "questions": [
+    {
+      "answer": "Lake Victoria",
+      "category": 3,
+      "difficulty": 2,
+      "id": 13,
+      "question": "What is the largest lake in Africa?"
+    },
+    {
+      "answer": "The Palace of Versailles",
+      "category": 3,
+      "difficulty": 3,
+      "id": 14,
+      "question": "In which royal palace would you find the Hall of Mirrors?"
+    },
+    {
+      "answer": "Agra",
+      "category": 3,
+      "difficulty": 2,
+      "id": 15,
+      "question": "The Taj Mahal is located in which Indian city?"
+    }
+  ],
+  "success": true,
+  "total_question": 3
+}
+
+user@DanielMathenge MINGW64 ~/TRIVIA-API (main)
+$ curl http://127.0.0.1:5000/categories/2/questions
+{
+  "current_category": 2,
+  "questions": [
+    {
+      "answer": "Escher",
+      "category": 2,
+      "difficulty": 1,
+      "id": 16,
+      "question": "Which Dutch graphic artist\u2013initials M C was a creator of optical illusions?"
+    },
+    {
+      "answer": "Mona Lisa",
+      "category": 2,
+      "difficulty": 3,
+      "id": 17,
+      "question": "La Giaconda is better known as what?"
+    },
+    {
+      "answer": "One",
+      "category": 2,
+      "difficulty": 4,
+      "id": 18,
+      "question": "How many paintings did Van Gogh sell in his lifetime?"
+    },
+    {
+      "answer": "Jackson Pollock",
+      "category": 2,
+      "difficulty": 2,
+      "id": 19,
+      "question": "Which American artist was a pioneer of Abstract Expressionism, and a leading exponent of action painting?"
+    },
+    {
+      "answer": "home",
+      "category": 2,
+      "difficulty": 3,
+      "id": 25,
+      "question": "im going"
+    }
+  ],
+  "success": true,
+  "total_question": 5
+}
+POST /quizzes
+•	Sends a post request to get next question
+•	Request arguments: quiz_category(dict), previous_ids(list)
+{
+  "question": null,
+  "success": true
+}
+
+    
+
+
 
 ## Testing
 
