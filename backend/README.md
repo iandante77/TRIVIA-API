@@ -158,79 +158,12 @@ POST /search/questions -
 GET /categories/<int:category_id>/questions
 •	Gets questions from a specific category
 •	Request arguments: category_id(int)
-{
-  "current_category": 3,
-  "questions": [
-    {
-      "answer": "Lake Victoria",
-      "category": 3,
-      "difficulty": 2,
-      "id": 13,
-      "question": "What is the largest lake in Africa?"
-    },
-    {
-      "answer": "The Palace of Versailles",
-      "category": 3,
-      "difficulty": 3,
-      "id": 14,
-      "question": "In which royal palace would you find the Hall of Mirrors?"
-    },
-    {
-      "answer": "Agra",
-      "category": 3,
-      "difficulty": 2,
-      "id": 15,
-      "question": "The Taj Mahal is located in which Indian city?"
-    }
-  ],
-  "success": true,
-  "total_question": 3
-}
+{"current_category":3,
+"questions":[{"answer":"Lake Victoria","category":3,"difficulty":2,"id":13,
+"question":"What is the largest lake in Africa?"},{"answer":"The Palace of Versailles","category":3,"difficulty":3,"id":14,"question":"In which royal palace would you find the Hall of Mirrors?"},{"answer":"Agra","category":3,"difficulty":2,"id":15,"question":"The Taj Mahal is located in which Indian city?"}],
+"success":true,"total_question":3}
 
-user@DanielMathenge MINGW64 ~/TRIVIA-API (main)
-$ curl http://127.0.0.1:5000/categories/2/questions
-{
-  "current_category": 2,
-  "questions": [
-    {
-      "answer": "Escher",
-      "category": 2,
-      "difficulty": 1,
-      "id": 16,
-      "question": "Which Dutch graphic artist\u2013initials M C was a creator of optical illusions?"
-    },
-    {
-      "answer": "Mona Lisa",
-      "category": 2,
-      "difficulty": 3,
-      "id": 17,
-      "question": "La Giaconda is better known as what?"
-    },
-    {
-      "answer": "One",
-      "category": 2,
-      "difficulty": 4,
-      "id": 18,
-      "question": "How many paintings did Van Gogh sell in his lifetime?"
-    },
-    {
-      "answer": "Jackson Pollock",
-      "category": 2,
-      "difficulty": 2,
-      "id": 19,
-      "question": "Which American artist was a pioneer of Abstract Expressionism, and a leading exponent of action painting?"
-    },
-    {
-      "answer": "home",
-      "category": 2,
-      "difficulty": 3,
-      "id": 25,
-      "question": "im going"
-    }
-  ],
-  "success": true,
-  "total_question": 5
-}
+
 POST /quizzes
 •	Sends a post request to get next question
 •	Request arguments: quiz_category(dict), previous_ids(list)
@@ -238,9 +171,6 @@ POST /quizzes
   "question": null,
   "success": true
 }
-
-    
-
 
 
 ## Testing
