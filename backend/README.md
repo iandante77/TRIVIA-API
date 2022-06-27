@@ -131,7 +131,7 @@ POST /questions
   "question": 1,
   "total_questions": 21,
 }
-POST /search/questions - 
+POST /questions - 
 •	Looks through all question and matches it to search term.
 •	Request arguments: SearchTerm(string)
 {

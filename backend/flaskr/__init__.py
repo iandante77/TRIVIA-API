@@ -46,17 +46,18 @@ def create_app(test_config=None):
     for all available categories.
     """
     @app.route('/categories')
-    def access_categories():
-        categories=Category.query.order_by(Category.id).all()
-
-        if len(categories)==0:
+    def get_categories():
+        all_categories = Category.query.all()
+        categories = {}
+        try:
+            for category in all_categories:
+                categories[category.id] = category.type
+            return jsonify({
+                'success': True,
+                'categories': categories
+            })
+        except:
             abort(404)
-
-        return jsonify({
-            'success':True,
-            'categories':{category.id: category.type for category in categories}
-        })
-
 
 
     """
@@ -72,22 +73,26 @@ def create_app(test_config=None):
     Clicking on the page numbers should update the questions.
     """
     @app.route('/questions')
-    def access_questions():
-        selection=Question.query.order_by(Question.id).all()
-        page_questions=paginate_questions(request,selection)
-
-        categories=Category.query.order_by(Category.id).all()
-
-        if len(page_questions)==0:
-            abort(404)
+    def get_questions():
+        selection = Question.query.order_by(Question.id).all()
+        all_questions = paginate_questions(request, selection)
+        try:
+            if len(all_questions) == 0:
+                abort(404)
+            all_categories = Category.query.all()
+            categories = {}
+            for category in all_categories:
+                categories[category.id] = category.type
         
-        return jsonify({
-            'success':True,
-            'questions':page_questions,
-            'all_questions':len(selection),
-            'categories':{category.id: category.type for category in categories},
-            'current_category':None
-        })
+
+            return jsonify({
+                'success': True,
+                'questions': all_questions,
+                'total_questions': len(Question.query.all()),
+                'categories': categories
+            })
+        except:
+            abort(404)
 
     """
 
@@ -98,23 +103,14 @@ def create_app(test_config=None):
     TEST: When you click the trash icon next to a question, the question will be removed.
     This removal will persist in the database and when you refresh the page.
     """
-    @app.route('/questions/<int:question_id>', methods=['DELETE'])
+    @app.route("/questions/<int:question_id>", methods=["DELETE"])
     def delete_question(question_id):
+        question = Question.query.get(question_id)
+        if question is None:
+            abort(404)
         try:
-            remove_question=Question.query.filter(Question.id==question_id).one_or_none()
-            if remove_question is None:
-                abort(404)
-
-            remove_question.delete()
-            selection=Question.query.order_by(Question.id).all()
-            page_questions=paginate_questions(request,selection)
-
-            return jsonify({
-                    'success':True,
-                    'deleted':question_id,
-                    'books':page_questions,
-                    'total_books':len(Question.query.all())
-                })
+            question.delete()
+            return jsonify({"success": True})
         except:
             abort(422)
 
@@ -136,6 +132,16 @@ def create_app(test_config=None):
         new_answer = body.get('answer')
         new_difficulty = body.get('difficulty')
         new_category = body.get('category')
+        search = body.get("searchTerm")
+        if search:
+            selection =  Question.query.filter(Question.question.ilike("%{}%".format(search))).all()
+            all_questions = paginate_questions(request, selection)
+
+            return jsonify({
+            'success': True,
+            'questions': all_questions,
+            'total_questions': len(selection)
+            })
 
         try:
             question=Question(question=new_question, answer=new_answer, difficulty=new_difficulty,category=new_category)
@@ -161,22 +167,6 @@ def create_app(test_config=None):
     only question that include that string within their question.
     Try using the word "title" to start.
     """
-    @app.route('/questions/search', methods=['POST'])
-    def search_questions():
-        body=request.get_json()
-        search=body.get('searchTerm', None)
-
-        if search:
-            search_results=Question.query.filter(Question.question.ilike(f'%{search}%')).all()
-            return jsonify({
-                'success':True,
-                'questions': [question.format() for question in search_results],
-                'total_questions':len(search_results),
-                'current_category':None
-            })
-        abort(404)
-
-
     """
     @TODO:
     Create a GET endpoint to get questions based on category.
